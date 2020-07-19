@@ -1,63 +1,50 @@
-class DishesController < ApplicationController
-  before_action :set_menu, only: %i[index new create]
-  before_action :set_dish, only: %i[show edit update destroy]
+module Api
+  module V1
+    class DishesController < ApplicationController
+      # before_action :authenticate
+      protect_from_forgery with: :null_session
 
-  # GET /dishes
-  def index
-    @dishes = @menu.dishes
-  end
+      # POST /api/v1/dishes
+      def create
+        # dish = current_user.dishes.new(dish_params)
+        dish = Dish.new(dish_params)
 
-  # GET /dishes/1
-  def show; end
+        if dish.save
+          render json: serializer(dish)
+        else
+          render json: errors(dish), status: 422
+        end
+      end
 
-  # GET /dishes/new
-  def new
-    @dish = JsonEntry.new
-  end
+      # DELETE /api/v1/dishes/:id
+      def destroy
+        # dish = current_user.dishes.find(params[:id])
+        dish = Dish.find(params[:id])
 
-  # GET /dishes/1/edit
-  def edit; end
+        if dish.destroy
+          head :no_content
+        else
+          render json: errors(dish), status: 422
+        end
+      end
 
-  # POST /dishes
-  def create
-    @dish = @menu.dishes.new(dish_params)
+      private
 
-    if @dish.save
-      redirect_to edit_dish_path(@dish), notice: "Json entry was successfully created."
-    else
-      render :new
+      # Strong params
+      def dish_params
+        params.require(:dish).permit(:name, :description, :price, :menu_id, :category)
+      end
+
+      # fast_jsonapi serializer
+      def serializer(records, options = {})
+        DishSerializer
+          .new(records, options)
+          .serialized_json
+      end
+
+      def errors(record)
+        { errors: record.errors.messages }
+      end
     end
-  end
-
-  # PATCH/PUT /dishes/1
-  def update
-    if @dish.update(dish_params)
-      redirect_to @dish, notice: "Json entry was successfully updated."
-    else
-      render :edit
-    end
-  end
-
-  # DELETE /dishes/1
-  def destroy
-    @dish.destroy
-    redirect_to dishes_url, notice: "Json entry was successfully destroyed."
-  end
-
-  private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_dish
-    @dish = Dish.find(params[:id])
-  end
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_menu
-    @menu = Menu.find(params[:menu_id])
-  end
-
-  # Only allow a trusted parameter "white list" through.
-  def dish_params
-    params.require(:dish).permit(:menu_id, :description, :name, :price, :type)
   end
 end
