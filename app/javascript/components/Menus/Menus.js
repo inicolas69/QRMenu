@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import Menu from './Menu';
-import styled from 'styled-components'
 
 const Menus = () => {
   const [menus, setMenus] = useState([]);
@@ -26,10 +25,10 @@ const Menus = () => {
   });
 
   return (
-    <div className="home">
+    <div className="home container">
       <div className="header">
         <h1>QRMenu</h1>
-        <div className="subHeader">Vos menu en QRCode, simplement.</div>
+        <div className="subheader">Vos menu en QRCode, simplement.</div>
       </div>
       <div className="grid">
         {grid}
