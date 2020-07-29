@@ -1,28 +1,5 @@
-// Place all the styles related to the Menu controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
-
-.menu-card {
-  border: 1px solid #efefef;
-  background-color: white;
-}
-
-.menu-name {
-  padding: 20px 0 10px 0;
-}
-
-.menu-restaurant-name {
-}
-
-.menu-link {
-margin: 2rem auto;
-
-  a {
-    color: white;
-    text-decoration: none;
-    &:hover {
-      text-decoration: none;
-      color: white;
-    }
-  }
+.wrapper {
+  max-width: 900px;
+  margin: 2rem auto;
+  display: flex;
 }
